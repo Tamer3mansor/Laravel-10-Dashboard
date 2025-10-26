@@ -27,7 +27,19 @@ class AppServiceProvider extends ServiceProvider
 
         // يمكنك الآن استخدام route() و __('...') بأمان
      
-        $event->menu->add(
+        $event->menu->add(        [
+        'text' => 'Language',
+        'icon' => 'fas fa-globe',
+        'submenu' => collect(LaravelLocalization::getSupportedLocales())
+            ->map(function ($properties, $locale) {
+                return [
+                    'text' => $properties['native'],
+                    'url'  => LaravelLocalization::getLocalizedURL($locale, null, [], true),
+                ];
+            })
+            ->values()
+            ->toArray(),
+        ],
             [
 
         'text' => __('auth.Roles And Permissions'),
@@ -48,19 +60,8 @@ class AppServiceProvider extends ServiceProvider
     ]
         ],   
         
-        [
-        'text' => 'Language',
-        'icon' => 'fas fa-globe',
-        'submenu' => collect(LaravelLocalization::getSupportedLocales())
-            ->map(function ($properties, $locale) {
-                return [
-                    'text' => $properties['native'],
-                    'url'  => LaravelLocalization::getLocalizedURL($locale, null, [], true),
-                ];
-            })
-            ->values()
-            ->toArray(),
-    ]);
+
+);
         
         // أضف هنا أي عناصر قائمة أخرى تحتاج إلى route() أو ترجمة
     });

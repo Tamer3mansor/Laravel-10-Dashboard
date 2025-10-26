@@ -61,6 +61,8 @@ $(document).on('submit', '#ajaxModal form', function(e) {
     data: data,
     success: function (response) {
       $('#ajaxModal').modal('hide');
+      $('#roles-table').DataTable().ajax.reload(null, false);
+
       // If response includes message and success flag, show
       if (response && response.message) toastr.success(response.message);
       else toastr.success('Saved successfully');
@@ -112,5 +114,11 @@ $(document).on('click', '.delete-record', function (e) {
   });
 });
 
+// Reload DataTable when modal is closed
+$('#ajaxModal').on('hidden.bs.modal', function () {
+  if ($.fn.DataTable.isDataTable('#roles-table')) {
+    $('#roles-table').DataTable().ajax.reload(null, false);
+  }
+});
 console.log('js_custom.js loaded ✅');
 
